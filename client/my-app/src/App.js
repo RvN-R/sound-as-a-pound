@@ -1,18 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import Axios from 'axios';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import "./App.css";
 
 function App() {
-//local host doesn't work because I need to not use GitPod
+  const [mongoDbResponseData, setMongoDbResponseData] = useState([]);
+
   useEffect(() => {
-    Axios.get('https://3000-rvnr-soundasapound-txgnbz53dnq.ws-eu67.gitpod.io/').then((response) => {
-      console.log(response)
-    })
-  },[])
+    Axios.get("http://localhost:3001/").then((response) => {
+      console.log(response);
+      setMongoDbResponseData(response.data);
+    });
+  }, []);
 
   return (
     <div className="App">
-      <h1>CRUD App with MERN</h1>
+      <h1>List of Data from MongoDb</h1>
+      {mongoDbResponseData.map((val, key) => {
+        return (
+          <div>
+            <ul>
+              <li>£{val.value}</li>
+              <li>{val.day}</li>
+              <li>{val.month}</li>
+              <li>{val.time}</li>
+              <li>{val.year}</li>
+            </ul>
+          </div>
+        );
+      })}
     </div>
   );
 }
