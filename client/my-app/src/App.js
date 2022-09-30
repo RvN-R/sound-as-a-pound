@@ -1,23 +1,18 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import Axios from 'axios';
 import './App.css';
 
 function App() {
+//local host doesn't work because I need to not use GitPod
+  useEffect(() => {
+    Axios.get('https://3000-rvnr-soundasapound-txgnbz53dnq.ws-eu67.gitpod.io/').then((response) => {
+      console.log(response)
+    })
+  },[])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>CRUD App with MERN</h1>
     </div>
   );
 }
