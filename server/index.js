@@ -16,17 +16,6 @@ mongoose.connect(`${MONGO_URL}`, {
   useNewUrlParser: true,
 });
 
-// Below function posts to the database I need to better utalise this to post when a function is called.
-// app.get('/', async (req, res) => {
-//   const currencyData = new CurrencyLayerModel({"value": 0.973, "day": 30, "month": 09, "year": 2022, "time": "08:53"})
-
-//   try{
-//     await currencyData.save();
-//   }catch(err){
-//     console.log(err);
-//   }
-// });
-
 async function postToMongo() {
   const currencyData = new CurrencyLayerModel({
     value: 2.0,
@@ -73,7 +62,8 @@ app.get("/", async (req, res) => {
 
 // database();
 
-postToMongo();
+// comment postToMongo() out unless you want to constantly post to MongoDB everytime you refresh or make changes to index.js in the server folder
+// postToMongo();
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");
