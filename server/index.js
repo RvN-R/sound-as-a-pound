@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
+const CurrencyLayerResponse = require("./api/CurrencyLayerCall");
 
 app.use(express.json());
 app.use(cors());
@@ -15,6 +16,13 @@ const MONGO_URL = process.env.MONGO_URL;
 mongoose.connect(`${MONGO_URL}`, {
   useNewUrlParser: true,
 });
+
+/// look at postToMonogo below for possible inspiration on how to assign the GBP value from CurrencyLayerResponse to a GBP value that can go into currency Data
+async function getCurrencyLayerResponse() {
+  console.log(await CurrencyLayerResponse());
+}
+
+getCurrencyLayerResponse();
 
 async function postToMongo() {
   const currencyData = new CurrencyLayerModel({
