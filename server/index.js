@@ -4,7 +4,10 @@ const cors = require("cors");
 const app = express();
 
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
-const CurrencyLayerResponse = require("./api/CurrencyLayerCall");
+const { response } = require("express");
+
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 app.use(express.json());
 app.use(cors());
@@ -12,25 +15,55 @@ app.use(cors());
 require("dotenv").config();
 
 const MONGO_URL = process.env.MONGO_URL;
+const CURRENCY_LAYER_CALL = process.env.CURRENCY_LAYER_CALL;
 
 mongoose.connect(`${MONGO_URL}`, {
   useNewUrlParser: true,
 });
 
-/// look at postToMonogo below for possible inspiration on how to assign the GBP value from CurrencyLayerResponse to a GBP value that can go into currency Data
+let todaysDate = "";
+
 async function getCurrencyLayerResponse() {
-  console.log(await CurrencyLayerResponse());
+  const url =
+    "https://api.apilayer.com/currency_data/live?source=USD&currencies=GBP";
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      apikey: `${CURRENCY_LAYER_CALL}`,
+    },
+    redirect: "follow",
+  };
+  fetch(url, requestOptions)
+    .then((res) => res.json())
+    .catch((err) => console.error("error" + err));
+
+  try {
+    let response = await fetch(url, requestOptions);
+    response = await response.json();
+    let GBP = response.quotes.USDGBP;
+    return GBP;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-getCurrencyLayerResponse();
+async function getTodaysDate() {
+  const date = new Date();
+  year = date.getFullYear();
+  month = date.getMonth();
+  day = date.getUTCDate();
+  time = date.toLocaleTimeString();
+  todaysDate = `${year}-${month}-${day}-${time}`;
+  return todaysDate;
+}
 
 async function postToMongo() {
+  const value = await getCurrencyLayerResponse();
+  const date = await getTodaysDate();
+
   const currencyData = new CurrencyLayerModel({
-    value: 2.0,
-    day: 01,
-    month: 10,
-    year: 2022,
-    time: "16:17",
+    value: value,
+    date: date,
   });
 
   try {
@@ -49,26 +82,6 @@ app.get("/", async (req, res) => {
     res.send(result);
   });
 });
-
-//database function connects to mongo db and was a method I learned in a video
-// const database = (module.exports = () => {
-//   const connectionParams = {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   };
-//   try {
-//     mongoose.connect(
-//       `${MONGO_URL}`,
-//       connectionParams
-//     );
-//     console.log("Database connected successfully");
-//   } catch (error) {
-//     console.log(error);
-//     console.log("Database failed to connect");
-//   }
-// });
-
-// database();
 
 // comment postToMongo() out unless you want to constantly post to MongoDB everytime you refresh or make changes to index.js in the server folder
 // postToMongo();

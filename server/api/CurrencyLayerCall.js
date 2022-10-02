@@ -5,28 +5,12 @@ require("dotenv").config();
 
 const CURRENCY_LAYER_CALL = process.env.CURRENCY_LAYER_CALL;
 
-// const url = "https://api.apilayer.com/currency_data/live?source=USD";
-// const requestOptions = {
-//   method: "GET",
-//   headers: {
-//     apikey: `${CURRENCY_LAYER_CALL}`,
-//   },
-//   redirect: "follow",
-// };
-
-// const CurrencyLayerFetch = fetch(url, requestOptions)
-//   .then((res) => {
-//     return res.json();
-//   })
-//   .then((json) => {
-//     const FetchedCurrency = json.quotes;
-//     console.log(FetchedCurrency);
-//   });
-
-// module.exports = CurrencyLayerFetch;
-
 async function CurrencyLayerFetch() {
-  const url = "https://api.apilayer.com/currency_data/live?source=USD";
+  // URL below returns all the currencies
+  // const url = "https://api.apilayer.com/currency_data/live?source=USD";
+  // URL below returns GBP
+  const url =
+    "https://api.apilayer.com/currency_data/live?source=USD&currencies=GBP";
   const requestOptions = {
     method: "GET",
     headers: {
@@ -46,5 +30,11 @@ async function CurrencyLayerFetch() {
     console.log(err);
   }
 }
+
+// async function printCurrencyLayerResponse() {
+//   console.log(await CurrencyLayerFetch());
+// }
+
+// printCurrencyLayerResponse();
 
 module.exports = CurrencyLayerFetch;
