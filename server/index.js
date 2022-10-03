@@ -1,7 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { TwitterApi } = require("twitter-api-v2");
 const cors = require("cors");
 const app = express();
+const CronJob = require("cron").CronJob;
+const path = require("path");
 
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
 const { response } = require("express");
@@ -16,6 +19,20 @@ require("dotenv").config();
 
 const MONGO_URL = process.env.MONGO_URL;
 const CURRENCY_LAYER_CALL = process.env.CURRENCY_LAYER_CALL;
+
+const TWITTER_APP_KEY = process.env.TWITTER_APP_KEY;
+const TWITTER_APP_SECRET = process.env.TWITTER_APP_SECRET;
+const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
+const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
+
+const client = new TwitterApi({
+  appKey: `${TWITTER_APP_KEY}`,
+  appSecret: `${TWITTER_APP_SECRET}`,
+  accessToken: `${TWITTER_ACCESS_TOKEN}`,
+  accessSecret: `${TWITTER_ACCESS_SECRET}`,
+});
+
+const rwClient = client.readWrite;
 
 mongoose.connect(`${MONGO_URL}`, {
   useNewUrlParser: true,
@@ -73,6 +90,33 @@ async function postToMongo() {
     console.log(err);
   }
 }
+
+const tweet = async () => {
+  const value = await getCurrencyLayerResponse();
+  const ukPound = String.fromCodePoint(0x00a3);
+  const usDollar = String.fromCodePoint(0x0024);
+  const text = `1 United States Dollar = ${value} Pound Sterling ${usDollar} vs ${ukPound}`;
+  try {
+    await rwClient.v2.tweet({
+      text: text,
+    });
+    console.log(text);
+    console.log("Success!!");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// tweet();
+
+const job = new CronJob("* * * * *", () => {
+  postToMongo();
+  console.log("postToMongoExicuted");
+  tweet();
+  console.log("tweet just executed");
+});
+
+// job.start();
 
 app.get("/", async (req, res) => {
   CurrencyLayerModel.find({}, (err, result) => {
