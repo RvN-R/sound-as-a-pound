@@ -16,7 +16,6 @@
 }
 
 .App {
-  /* text-align: center; */
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -24,7 +23,6 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  /* justify-content: center; */
   
 }
 
