@@ -51,9 +51,19 @@ function App() {
       labels: GbpData.map((data) => data.date),
       datasets: [
         {
-          label: "Value of GBP against Euro",
+          label: "Value Of GBP Against USD",
           data: GbpData.map((data) => data.value),
-          backgroundColor: "red",
+          backgroundColor: "rgba(33,208,178,0.5)",
+          borderColor: "rgba(29,205,254,1)",
+          borderJoinStyle: "bevel",
+          pointBackgroundColor: "rgba(29,205,254,1)",
+          fill: true,
+          pointHoverBackgroundColor: "rgba(47,69,92,1)",
+          pointHoverBorderColor: "rgba(29,205,254,1)",
+          pointHoverBorderWidth: "15",
+          pointStyle: "circle",
+          hitRadius: "5",
+          titleColor: "white",
         },
       ],
     };
