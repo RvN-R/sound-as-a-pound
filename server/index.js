@@ -4,10 +4,8 @@ const { TwitterApi } = require("twitter-api-v2");
 const cors = require("cors");
 const app = express();
 const CronJob = require("cron").CronJob;
-const path = require("path");
 
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
-const { response } = require("express");
 
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
@@ -91,11 +89,13 @@ async function postToMongo() {
   }
 }
 
+// postToMongo();
+
 const tweet = async () => {
   const value = await getCurrencyLayerResponse();
   const ukPound = String.fromCodePoint(0x00a3);
   const usDollar = String.fromCodePoint(0x0024);
-  const text = `1 United States Dollar = ${value} Pound Sterling ${usDollar} vs ${ukPound}`;
+  const text = `1 United States Dollar = ${value} Pound Sterling ${usDollar} vs ${ukPound} #soundasapound #gbp #poundcrisis #sterlingcrisis`;
   try {
     await rwClient.v2.tweet({
       text: text,
@@ -107,18 +107,20 @@ const tweet = async () => {
   }
 };
 
+// tweet();
+
 const job = new CronJob("0 08 * * *", () => {
-  // postToMongo();
-  console.log("postToMongoExicuted 31");
-  // tweet();
-  console.log("tweet just executed 31");
+  postToMongo();
+  console.log("postToMongoExicuted morning job");
+  tweet();
+  console.log("tweet just executed morning job");
 });
 
 const job2 = new CronJob("0 17 * * *", () => {
-  // postToMongo();
-  console.log("postToMongoExicuted 32");
-  // tweet();
-  console.log("tweet just executed 32");
+  postToMongo();
+  console.log("postToMongoExicuted evening job");
+  tweet();
+  console.log("tweet just executed evening job");
 });
 
 job.start();
