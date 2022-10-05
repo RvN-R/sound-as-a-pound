@@ -107,16 +107,22 @@ const tweet = async () => {
   }
 };
 
-// tweet();
-
-const job = new CronJob("* * * * *", () => {
-  postToMongo();
-  console.log("postToMongoExicuted");
-  tweet();
-  console.log("tweet just executed");
+const job = new CronJob("0 08 * * *", () => {
+  // postToMongo();
+  console.log("postToMongoExicuted 31");
+  // tweet();
+  console.log("tweet just executed 31");
 });
 
-// job.start();
+const job2 = new CronJob("0 17 * * *", () => {
+  // postToMongo();
+  console.log("postToMongoExicuted 32");
+  // tweet();
+  console.log("tweet just executed 32");
+});
+
+job.start();
+job2.start();
 
 app.get("/", async (req, res) => {
   CurrencyLayerModel.find({}, (err, result) => {
@@ -126,9 +132,6 @@ app.get("/", async (req, res) => {
     res.send(result);
   });
 });
-
-// comment postToMongo() out unless you want to constantly post to MongoDB everytime you refresh or make changes to index.js in the server folder
-// postToMongo();
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");
