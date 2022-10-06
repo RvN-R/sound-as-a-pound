@@ -4,8 +4,8 @@ const { TwitterApi } = require("twitter-api-v2");
 const cors = require("cors");
 const app = express();
 const CronJob = require("cron").CronJob;
-
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
+const PORT = process.env.PORT;
 
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
@@ -135,6 +135,6 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("Server is running on port 3001");
 });

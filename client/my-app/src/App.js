@@ -16,7 +16,7 @@ function App() {
     let date = [];
     let value = [];
 
-    Axios.get("http://localhost:3001/")
+    Axios.get("https://soundasapound-api.onrender.com")
       .then((res) => {
         for (const dataObj of res.data) {
           date.push(dataObj.date);
