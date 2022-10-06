@@ -119,3 +119,21 @@
     display: none
   }
 }
+
+@media screen and (max-width: 375px) {
+  .container div h1{
+    font-size: 28px;
+  }
+  .container div h4{
+    display:none
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .container div h1{
+    font-size: 20px;
+  }
+  .container div h4{
+    display:none
+  }
+}
