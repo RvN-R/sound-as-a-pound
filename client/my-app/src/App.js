@@ -75,7 +75,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/").then((response) => {
+    Axios.get("https://soundasapound-api.onrender.com").then((response) => {
       setMongoDbResponseData(response.data[0]);
       console.log(response.data[0]);
     });
