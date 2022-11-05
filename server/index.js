@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 const CronJob = require("cron").CronJob;
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
@@ -65,12 +65,15 @@ async function getCurrencyLayerResponse() {
 async function getTodaysDate() {
   const date = new Date();
   year = date.getFullYear();
-  month = date.getMonth();
+  month = date.getMonth() + 1;
+  console.log(month);
   day = date.getUTCDate();
   time = date.toLocaleTimeString();
   todaysDate = `${year}-${month}-${day}-${time}`;
   return todaysDate;
 }
+
+getTodaysDate();
 
 async function postToMongo() {
   const value = await getCurrencyLayerResponse();
@@ -136,5 +139,5 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("Server is running on port 3001");
+  console.log(`Server is running on port ${PORT}`);
 });

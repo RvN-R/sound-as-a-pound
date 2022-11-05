@@ -16,7 +16,7 @@ function App() {
     let date = [];
     let value = [];
 
-    Axios.get("https://soundasapound-api.onrender.com")
+    Axios.get("http://localhost:3001/")
       .then((res) => {
         for (const dataObj of res.data) {
           date.push(dataObj.date);
@@ -75,7 +75,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    Axios.get("https://soundasapound-api.onrender.com").then((response) => {
+    Axios.get("http://localhost:3001/").then((response) => {
       setMongoDbResponseData(response.data[0]);
       console.log(response.data[0]);
     });
