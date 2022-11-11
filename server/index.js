@@ -62,6 +62,30 @@ async function getCurrencyLayerResponse() {
   }
 }
 
+async function getCurrencyLayerDollarResponse() {
+  const url =
+    "https://api.apilayer.com/currency_data/live?source=GBP&currencies=USD";
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      apikey: `${CURRENCY_LAYER_CALL}`,
+    },
+    redirect: "follow",
+  };
+  fetch(url, requestOptions)
+    .then((res) => res.json())
+    .catch((err) => console.error("error" + err));
+
+  try {
+    let response = await fetch(url, requestOptions);
+    response = await response.json();
+    let USD = response.quotes.GBPUSD;
+    return USD;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function getTodaysDate() {
   const date = new Date();
   year = date.getFullYear();
