@@ -126,8 +126,8 @@ const job2 = new CronJob("0 17 * * *", () => {
   console.log("tweet just executed evening job");
 });
 
-job.start();
-job2.start();
+// job.start();
+// job2.start();
 
 app.get("/", async (req, res) => {
   CurrencyLayerModel.find({}, (err, result) => {

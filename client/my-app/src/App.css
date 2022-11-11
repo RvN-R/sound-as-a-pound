@@ -15,11 +15,24 @@
   color: #2f455c;
 }
 
+.ochre{
+  color:#DB7C26
+}
+
+.flame{
+  color: #D8572A
+}
+
+.ggbridge{
+  color:#C32F27
+}
+
 .App {
   font-family: 'Montserrat', sans-serif;
 }
 
-.container{
+.container
+.dollar-container{
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
@@ -32,13 +45,22 @@
   align-items: center;
 }
 
-.h1_container{
+.h1-container{
   border-top-style: solid ;
   border-bottom-style: solid ;
   border-top-width: 5px;
   border-bottom-width: 5px;
   border-bottom-color:#34F5C5;
   border-top-color:#34F5C5;
+}
+
+.dollar-h1-container{
+  border-top-style: solid ;
+  border-bottom-style: solid ;
+  border-top-width: 5px;
+  border-bottom-width: 5px;
+  border-bottom-color:#C32F27;
+  border-top-color:#C32F27;
 }
 
 .chart-container{
@@ -53,7 +75,19 @@
 
 }
 
+.dollar-container div:first-child{
+  background-color: #780116;
+  border-radius: 10;
+}
+
 .container div h1{
+  font-weight: 1000;
+  font-style: italic;
+  text-align: center;
+  
+}
+
+.dollar-container div h1{
   font-weight: 1000;
   font-style: italic;
   text-align: center;
@@ -62,12 +96,24 @@
 .container div h2{
   font-weight: 300;
 }
+.dollar-container div h2{
+  font-weight: 300;
+}
 .container div h3{
+  font-weight: 300;
+  font-style: italic;
+}
+.dollar-container div h3{
   font-weight: 300;
   font-style: italic;
 }
 
 .container div h4{
+  font-weight: 300;
+  font-style: italic;
+}
+
+.dollar-container div h4{
   font-weight: 300;
   font-style: italic;
 }
@@ -78,10 +124,79 @@
   color: #34f5c5;
 }
 
+.dollar-container div h3 a{
+  font-weight: 300;
+  font-style: italic;
+  color: #DB7C26;
+}
+
 .container div h3 a:hover{
   font-weight: 400;
   font-style: italic;
   color: #1DCDFE;
+}
+
+.dollar-container div h3 a:hover{
+  font-weight: 400;
+  font-style: italic;
+  color: #F7B538;
+}
+
+.toggler {
+  display: flex;
+  align-items: center;
+  color:#21d0b2
+}
+.dollar-toggler {
+  display: flex;
+  align-items: center;
+  color:#F7B538
+}
+
+.toggler p, .dollar-toggler p {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.toggler--slider {
+  width: 25px;
+  height: 13px;
+  background-color: #2B283A;
+  border-radius: 2rem;
+  margin-inline: 7px;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 1px solid #21d0b2;
+  box-sizing: content-box;
+}
+
+.dollar-toggler--slider{
+  width: 25px;
+  height: 13px;
+  background-color: #2B283A;
+  border-radius: 2rem;
+  margin-inline: 7px;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border: 1px solid #F7B538;
+  box-sizing: content-box;
+}
+
+
+header.dollar .toggler--slider {
+  border-color: white;
+  background-color: #F5F5F5;
+}
+
+.toggler--slider--circle {
+  height: 13px;
+  width: 13px;
+  background-color: white;
+  border-radius: 50%;
 }
 
 @media screen and (min-width: 1440px) {
@@ -89,6 +204,12 @@
     font-size: 100px;
   }
   .container div h4{
+    display:none
+  }
+  .dollar-container div h1{
+    font-size: 100px;
+  }
+  .dollar-container div h4{
     display:none
   }
 }
@@ -100,6 +221,12 @@
   .container div h4{
     display:none
   }
+  .dollar-container div h1{
+    font-size: 75px;
+  }
+  .dollar-container div h4{
+    display:none
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -109,6 +236,12 @@
   .container div h4{
     display:none
   }
+  .dollar-container div h1{
+    font-size: 60px;
+  }
+  .dollar-container div h4{
+    display:none
+  }
 }
 
 @media screen and (max-width: 425px) {
@@ -116,6 +249,12 @@
     display: none
   }
   .container div h2{
+    display: none
+  }
+  .dollar-container div h3{
+    display: none
+  }
+  .dollar-container div h2{
     display: none
   }
 }
@@ -129,6 +268,12 @@
   .container div h4{
     display:none
   }
+  .dollar-container div h1{
+    font-size: 28px;
+  }
+  .dollar-container div h4{
+    display:none
+  }
 }
 
 @media screen and (max-width: 320px) {
@@ -136,6 +281,12 @@
     font-size: 20px;
   }
   .container div h4{
+    display:none
+  }
+  .dollar-container div h1{
+    font-size: 20px;
+  }
+  .dollar-container div h4{
     display:none
   }
 }

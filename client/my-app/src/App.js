@@ -9,8 +9,8 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 function App() {
   const [mongoDbResponseData, setMongoDbResponseData] = useState([]);
   console.log(mongoDbResponseData.date);
-
   const [graphData, setGraphData] = useState(Chart);
+  const [dollarMode, setDollarMode] = useState(false);
 
   function Chart() {
     let date = [];
@@ -70,6 +70,10 @@ function App() {
     return theChart;
   }
 
+  function dollarModeFunc() {
+    setDollarMode((prevMode) => !prevMode);
+  }
+
   useEffect(() => {
     Chart();
   }, []);
@@ -83,12 +87,12 @@ function App() {
 
   return (
     <div className="App">
-      <div className="container">
+      <div className={dollarMode ? "dollar-container" : "container"}>
         <div className="header">
-          <h2 className="caribbean_green">
+          <h2 className={dollarMode ? "ggbridge" : "caribbean_green"}>
             Started posting GBP value on <u>{mongoDbResponseData.date}</u>
           </h2>
-          <h3 className="sea_green_crayola">
+          <h3 className={dollarMode ? "ochre" : "sea_green_crayola"}>
             Follow us on Twitter{" "}
             <a
               href="https://twitter.com/sound_as_apound"
@@ -98,10 +102,24 @@ function App() {
               <FontAwesomeIcon icon={faTwitter} /> @sound_as_apound
             </a>
           </h3>
-          <div className="h1_container">
-            <h1 className="vivid_sky_blue">@SOUNDASAPOUND</h1>
+          <div className={dollarMode ? "dollar-h1-container" : "h1-container"}>
+            <h1 className={dollarMode ? "flame" : "vivid_sky_blue"}>
+              @SOUNDASAPOUND
+            </h1>
           </div>
-          <h4 className="caribbean_green">
+          <div className={dollarMode ? "dollar-toggler" : "toggler"}>
+            <p className="toggler--light">£</p>
+            <div
+              className={
+                dollarMode ? "dollar-toggler--slider" : "toggler--slider"
+              }
+              onClick={dollarModeFunc}
+            >
+              <div className="toggler--slider--circle"></div>
+            </div>
+            <p className="toggler--dark">$</p>
+          </div>
+          <h4 className={dollarMode ? "ggbridge" : "caribbean_green"}>
             Started posting GBP value on <u>{mongoDbResponseData.date}</u>
           </h4>
         </div>
