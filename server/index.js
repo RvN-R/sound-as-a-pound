@@ -5,6 +5,7 @@ const cors = require("cors");
 const app = express();
 const CronJob = require("cron").CronJob;
 const CurrencyLayerModel = require("./models/CurrencyLayerData");
+const DollarCurrencyDataModel = require("./models/DollarCurrencyLayerData");
 const PORT = process.env.PORT || 3001;
 
 const fetch = (...args) =>
@@ -116,7 +117,24 @@ async function postToMongo() {
   }
 }
 
-// postToMongo();
+async function postDollarToMongo() {
+  const value = await getCurrencyLayerDollarResponse();
+  const date = await getTodaysDate();
+
+  const currencyDollarData = new DollarCurrencyDataModel({
+    value: value,
+    date: date,
+  });
+
+  try {
+    await currencyDollarData.save();
+    console.log("Dollar Data Saved");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+//postDollarToMongo();
 
 const tweet = async () => {
   const value = await getCurrencyLayerResponse();
@@ -155,6 +173,15 @@ const job2 = new CronJob("0 17 * * *", () => {
 
 app.get("/", async (req, res) => {
   CurrencyLayerModel.find({}, (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  });
+});
+
+app.get("/", async (req, res) => {
+  DollarCurrencyDataModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
     }
