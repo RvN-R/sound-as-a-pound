@@ -8,15 +8,53 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 function App() {
   const [mongoDbResponseData, setMongoDbResponseData] = useState([]);
-  console.log(mongoDbResponseData.date);
-  const [graphData, setGraphData] = useState(Chart);
+  const [graphData, setGraphData] = useState({
+    labels: GbpData.map((data) => data.date),
+    datasets: [
+      {
+        label: "Value Of GBP Against USD",
+        data: GbpData.map((data) => data.value),
+        backgroundColor: "rgba(33,208,178,0.5)",
+        borderColor: "rgba(29,205,254,1)",
+        borderJoinStyle: "bevel",
+        pointBackgroundColor: "rgba(29,205,254,1)",
+        fill: true,
+        pointHoverBackgroundColor: "rgba(47,69,92,1)",
+        pointHoverBorderColor: "rgba(29,205,254,1)",
+        pointHoverBorderWidth: "15",
+        pointStyle: "circle",
+        hitRadius: "5",
+        titleColor: "white",
+      },
+    ],
+  });
+  const [dollarGraphData, setDollarGraphData] = useState({
+    labels: GbpData.map((data) => data.date),
+    datasets: [
+      {
+        label: "Value Of USD Against GBP",
+        data: GbpData.map((data) => data.value),
+        backgroundColor: "rgba(33,208,178,0.5)",
+        borderColor: "rgba(29,205,254,1)",
+        borderJoinStyle: "bevel",
+        pointBackgroundColor: "rgba(29,205,254,1)",
+        fill: true,
+        pointHoverBackgroundColor: "rgba(47,69,92,1)",
+        pointHoverBorderColor: "rgba(29,205,254,1)",
+        pointHoverBorderWidth: "15",
+        pointStyle: "circle",
+        hitRadius: "5",
+        titleColor: "white",
+      },
+    ],
+  });
   const [dollarMode, setDollarMode] = useState(false);
 
-  function Chart() {
+  function poundChart() {
     let date = [];
     let value = [];
 
-    Axios.get("http://localhost:3001/")
+    return Axios.get("http://localhost:3001/")
       .then((res) => {
         for (const dataObj of res.data) {
           date.push(dataObj.date);
@@ -46,28 +84,42 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+  }
 
-    const theChart = {
-      labels: GbpData.map((data) => data.date),
-      datasets: [
-        {
-          label: "Value Of GBP Against USD",
-          data: GbpData.map((data) => data.value),
-          backgroundColor: "rgba(33,208,178,0.5)",
-          borderColor: "rgba(29,205,254,1)",
-          borderJoinStyle: "bevel",
-          pointBackgroundColor: "rgba(29,205,254,1)",
-          fill: true,
-          pointHoverBackgroundColor: "rgba(47,69,92,1)",
-          pointHoverBorderColor: "rgba(29,205,254,1)",
-          pointHoverBorderWidth: "15",
-          pointStyle: "circle",
-          hitRadius: "5",
-          titleColor: "white",
-        },
-      ],
-    };
-    return theChart;
+  function dollarChart() {
+    let dollarDate = [];
+    let dollarValue = [];
+
+    return Axios.get("http://localhost:3001/dollar")
+      .then((res) => {
+        for (const dollarDataObj of res.data) {
+          dollarDate.push(dollarDataObj.date);
+          dollarValue.push(dollarDataObj.value);
+        }
+        setDollarGraphData({
+          labels: dollarDate,
+          datasets: [
+            {
+              label: "Value Of USD Against GBP",
+              data: dollarValue,
+              backgroundColor: "rgba(194,72,66,0.5)",
+              borderColor: "rgba(216,87,42,1)",
+              borderJoinStyle: "bevel",
+              pointBackgroundColor: "rgba(219,124,38,1)",
+              fill: true,
+              pointHoverBackgroundColor: "rgba(47,69,92,1)",
+              pointHoverBorderColor: "rgba(219,124,38,1)",
+              pointHoverBorderWidth: "15",
+              pointStyle: "circle",
+              hitRadius: "5",
+              titleColor: "white",
+            },
+          ],
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function dollarModeFunc() {
@@ -75,13 +127,25 @@ function App() {
   }
 
   useEffect(() => {
-    Chart();
-  }, []);
+    const fetchCurrency = async () => {
+      if (dollarMode === true) {
+        await dollarChart();
+      } else {
+        await poundChart();
+      }
+    };
+    fetchCurrency();
+  }, [dollarMode]);
 
   useEffect(() => {
     Axios.get("http://localhost:3001/").then((response) => {
       setMongoDbResponseData(response.data[0]);
-      console.log(response.data[0]);
+    });
+  }, []);
+
+  useEffect(() => {
+    Axios.get("http://localhost:3001/dollar").then((response) => {
+      console.log(response.data);
     });
   }, []);
 
@@ -90,7 +154,8 @@ function App() {
       <div className={dollarMode ? "dollar-container" : "container"}>
         <div className="header">
           <h2 className={dollarMode ? "ggbridge" : "caribbean_green"}>
-            Started posting GBP value on <u>{mongoDbResponseData.date}</u>
+            Started posting {dollarMode ? "USD" : "GBP"} value on{" "}
+            <u>{mongoDbResponseData.date}</u>
           </h2>
           <h3 className={dollarMode ? "ochre" : "sea_green_crayola"}>
             Follow us on Twitter{" "}
@@ -125,7 +190,7 @@ function App() {
         </div>
 
         <div className="chart-container">
-          <LineChart chartData={graphData} />
+          <LineChart chartData={dollarMode ? dollarGraphData : graphData} />
         </div>
       </div>
     </div>

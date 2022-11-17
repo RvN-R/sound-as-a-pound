@@ -91,7 +91,6 @@ async function getTodaysDate() {
   const date = new Date();
   year = date.getFullYear();
   month = date.getMonth() + 1;
-  console.log(month);
   day = date.getUTCDate();
   time = date.toLocaleTimeString();
   todaysDate = `${year}-${month}-${day}-${time}`;
@@ -134,7 +133,7 @@ async function postDollarToMongo() {
   }
 }
 
-//postDollarToMongo();
+// postDollarToMongo();
 
 const tweet = async () => {
   const value = await getCurrencyLayerResponse();
@@ -157,6 +156,8 @@ const tweet = async () => {
 const job = new CronJob("0 08 * * *", () => {
   postToMongo();
   console.log("postToMongoExicuted morning job");
+  postDollarToMongo();
+  console.log("postDollarToMongo morning job");
   tweet();
   console.log("tweet just executed morning job");
 });
@@ -164,12 +165,14 @@ const job = new CronJob("0 08 * * *", () => {
 const job2 = new CronJob("0 17 * * *", () => {
   postToMongo();
   console.log("postToMongoExicuted evening job");
+  postDollarToMongo();
+  console.log("postDollarToMongo evening job");
   tweet();
   console.log("tweet just executed evening job");
 });
 
-// job.start();
-// job2.start();
+job.start();
+job2.start();
 
 app.get("/", async (req, res) => {
   CurrencyLayerModel.find({}, (err, result) => {
@@ -180,7 +183,7 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.get("/", async (req, res) => {
+app.get("/dollar", async (req, res) => {
   DollarCurrencyDataModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
